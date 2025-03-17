@@ -59,13 +59,25 @@ export function MaterialTopTabView({
   return (
     <TabView<Route<string>>
       {...rest}
-      onIndexChange={(index) => {
-        const route = state.routes[index];
+      // onIndexChange={(index) => {
+      //   const route = state.routes[index];
 
-        navigation.dispatch({
-          ...CommonActions.navigate(route),
+      //   navigation.dispatch({
+      //     ...CommonActions.navigate(route),
+      //     target: state.key,
+      //   });
+      // }}
+      onIndexChange={(index) => {
+        if (!navigation.isFocused()) {
+          return
+        }
+        return navigation.dispatch({
+          ...CommonActions.navigate({
+            name: state.routes[index].name,
+            merge: true,
+          }),
           target: state.key,
-        });
+        })
       }}
       renderScene={({ route, position }) => (
         <TabAnimationContext.Provider value={{ position }}>
